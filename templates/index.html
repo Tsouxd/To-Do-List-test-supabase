@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase Task Manager</title>
+    <!-- On lie le fichier CSS personnalisé -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="todo-container">
+    <h1>Mes Tâches Cloud</h1>
+
+    <!-- Formulaire d'ajout -->
+    <form action="/add" method="POST" class="input-group">
+        <input type="text" name="title" placeholder="Quelle est la prochaine étape ?" required>
+        <button type="submit" class="btn-add">Ajouter</button>
+    </form>
+
+    <!-- Liste -->
+    <ul class="task-list">
+        {% for task in tasks %}
+        <li class="task-item">
+            <span class="task-title {{ 'completed' if task.completed }}">
+                {{ task.title }}
+            </span>
+            
+            <div class="actions">
+                {% if not task.completed %}
+                    <a href="/update/{{ task.id }}/true" class="btn-action btn-check" title="Terminer">✓</a>
+                {% else %}
+                    <a href="/update/{{ task.id }}/false" class="btn-action btn-undo" title="Annuler">↩</a>
+                {% endif %}
+                <a href="/delete/{{ task.id }}" class="btn-action btn-delete" title="Supprimer">🗑</a>
+            </div>
+        </li>
+        {% else %}
+        <p style="text-align: center; color: #9ca3af;">Aucune tâche en cours 🏖️</p>
+        {% endfor %}
+    </ul>
+</div>
+
+</body>
+</html>
